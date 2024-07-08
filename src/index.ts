@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
-
+import passport from "passport";
 import statusRoutes from "./routes/statusRoutes";
+import authRoutes from "./routes/authRoutes";
+import "./config/passport"; // Import the passport configuration
 
 dotenv.config();
 
@@ -24,11 +26,14 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
+app.use(passport.initialize());
+
 app.get("/", (req, res) => {
   res.send("Flash-Art-Chall API");
 });
 
-app.use("/api", statusRoutes);
+app.use("/api/status", statusRoutes);
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
