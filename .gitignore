@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Build directories
+dist/
+out/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Environment variables
+.env
+
+# VS Code directories
+# .vscode/
+.history/
+
+# macOS system files
+.DS_Store
+
+# Docker files
+docker-compose.override.yml
+
+# Debug output
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+
+# Miscellaneous
+*.swp
+*.swo
