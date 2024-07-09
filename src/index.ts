@@ -7,6 +7,9 @@ import passport from "passport";
 import statusRoutes from "./routes/statusRoutes";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import flashRoutes from "./routes/flashRoutes";
+import styleRoutes from "./routes/styleRoutes";
+import slotRoutes from "./routes/slotRoutes";
 import "./config/passport"; // Import the passport configuration
 
 dotenv.config();
@@ -36,6 +39,9 @@ app.get("/", (req, res) => {
 app.use("/api/status", statusRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes); // Add user routes
+app.use("/api/flashes", flashRoutes); // Add flash routes
+app.use("/api/styles", styleRoutes); // Add style routes
+app.use("/api/slots", slotRoutes); // Add slot routes
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
