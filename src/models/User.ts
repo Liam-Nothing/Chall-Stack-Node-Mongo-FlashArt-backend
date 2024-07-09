@@ -5,15 +5,19 @@ export interface UserDocument extends Document {
   username: string;
   email: string;
   password: string;
-  role: string;
+  role: "utilisateur" | "tatoueur" | "admin" | "organisateur_event";
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const UserSchema = new Schema<UserDocument>({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
+  password: { type: String, required: true, select: false },
+  role: {
+    type: String,
+    enum: ["utilisateur", "tatoueur", "admin", "organisateur_event"],
+    default: "utilisateur",
+  },
 });
 
 UserSchema.pre("save", async function (next) {

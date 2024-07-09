@@ -16,15 +16,16 @@ const opts: StrategyOptions = {
 };
 
 passport.use(
-  new JwtStrategy(opts, (jwt_payload: any, done: any) => {
-    User.findById(jwt_payload.id)
-      .then((user: UserDocument | null) => {
-        if (user) {
-          return done(null, user);
-        }
-        return done(null, false);
-      })
-      .catch((err) => console.log(err));
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    try {
+      const user = await User.findById(jwt_payload.id);
+      if (user) {
+        return done(null, user);
+      }
+      return done(null, false);
+    } catch (err) {
+      return done(err, false);
+    }
   })
 );
 

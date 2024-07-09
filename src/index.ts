@@ -6,6 +6,7 @@ import morgan from "morgan";
 import passport from "passport";
 import statusRoutes from "./routes/statusRoutes";
 import authRoutes from "./routes/authRoutes";
+import userRoutes from "./routes/userRoutes";
 import "./config/passport"; // Import the passport configuration
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/status", statusRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes); // Add user routes
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

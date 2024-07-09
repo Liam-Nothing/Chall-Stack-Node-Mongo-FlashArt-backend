@@ -12,9 +12,9 @@ const generateToken = (user: UserDocument) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   try {
-    const user = new User({ username, email, password });
+    const user = new User({ username, email, password, role });
     await user.save();
     const token = generateToken(user);
     res.status(201).json({ token });
@@ -26,7 +26,8 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }, { password: 1 });
+    console.log(user);
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
