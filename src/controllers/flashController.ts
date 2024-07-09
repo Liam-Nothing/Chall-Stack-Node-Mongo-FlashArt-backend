@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import Flash, { FlashDocument } from "../models/Flash";
+import { ParsedQs } from "qs";
 
 // GET /api/flashes - Get all flashes
 export const getAllFlashes = async (req: Request, res: Response) => {
   try {
-    const flashes = await Flash.find().populate("id_style");
+    const flashes = await Flash.find()
+      .populate("id_style")
+      .populate("id_tatoueur");
     res.status(200).json(flashes);
   } catch (err) {
     res.status(500).json({ error: "Error fetching flashes" });
@@ -14,7 +17,9 @@ export const getAllFlashes = async (req: Request, res: Response) => {
 // GET /api/flashes/:id - Get flash by ID
 export const getFlashById = async (req: Request, res: Response) => {
   try {
-    const flash = await Flash.findById(req.params.id).populate("id_style");
+    const flash = await Flash.findById(req.params.id)
+      .populate("id_style")
+      .populate("id_tatoueur");
     if (!flash) {
       return res.status(404).json({ error: "Flash not found" });
     }
@@ -60,5 +65,32 @@ export const deleteFlash = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Flash deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Error deleting flash" });
+  }
+};
+
+// GET /api/flashes/search - Search flashes
+export const searchFlashes = async (req: Request, res: Response) => {
+  const { tatoueurId, styleIds } = req.query as {
+    tatoueurId?: string;
+    styleIds?: string | string[] | ParsedQs | ParsedQs[];
+  };
+
+  try {
+    const query: any = {};
+
+    if (tatoueurId) {
+      query["id_tatoueur"] = tatoueurId;
+    }
+
+    if (styleIds && typeof styleIds === "string") {
+      query["id_style"] = { $in: styleIds.split(",") };
+    }
+
+    const flashes = await Flash.find(query)
+      .populate("id_style")
+      .populate("id_tatoueur");
+    res.status(200).json(flashes);
+  } catch (err) {
+    res.status(500).json({ error: "Error searching flashes" });
   }
 };

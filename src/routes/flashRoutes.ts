@@ -5,6 +5,7 @@ import {
   createFlash,
   updateFlash,
   deleteFlash,
+  searchFlashes,
 } from "../controllers/flashController";
 import passport from "passport";
 
@@ -14,6 +15,11 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   getAllFlashes
+);
+router.get(
+  "/search",
+  passport.authenticate("jwt", { session: false }),
+  searchFlashes
 );
 router.get(
   "/:id",
