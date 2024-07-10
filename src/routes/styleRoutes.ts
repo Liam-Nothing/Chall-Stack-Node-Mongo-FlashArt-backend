@@ -10,7 +10,11 @@ import passport from "passport";
 
 const router = Router();
 
-router.get("/", passport.authenticate("jwt", { session: false }), getAllStyles);
+router.get(
+  "/",
+  // passport.authenticate("jwt", { session: false }),
+  getAllStyles
+);
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),

@@ -13,7 +13,7 @@ const router = Router();
 
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   getAllFlashes
 );
 router.get(
