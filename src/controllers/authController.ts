@@ -12,21 +12,30 @@ const generateToken = (user: UserDocument) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const { email, password, pseudo, name, lastname, description, socialLinks } =
-    req.body;
+  const {
+    email,
+    password,
+    role,
+    name,
+    lastname,
+    pseudo,
+    description,
+    socialLinks,
+  } = req.body;
   try {
     const user = new User({
       email,
       password,
-      pseudo,
+      role,
       name,
       lastname,
+      pseudo,
       description,
       socialLinks,
     });
     await user.save();
     const token = generateToken(user);
-    res.status(201).json({ token });
+    res.status(201).json({ token, role: user.role });
   } catch (err) {
     res.status(500).json({ error: "Error registering new user" });
   }
@@ -35,12 +44,12 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email }, { password: 1 });
+    const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     const token = generateToken(user);
-    res.status(200).json({ token });
+    res.status(200).json({ token, role: user.role });
   } catch (err) {
     res.status(500).json({ error: "Error logging in" });
   }

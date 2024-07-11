@@ -6,26 +6,14 @@ import {
   updateSlot,
   deleteSlot,
 } from "../controllers/slotController";
-import passport from "passport";
+import { authenticateJWT } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", passport.authenticate("jwt", { session: false }), getAllSlots);
-router.get(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  getSlotById
-);
-router.post("/", passport.authenticate("jwt", { session: false }), createSlot);
-router.put(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  updateSlot
-);
-router.delete(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  deleteSlot
-);
+router.get("/", authenticateJWT, getAllSlots);
+router.get("/:id", authenticateJWT, getSlotById);
+router.post("/", authenticateJWT, createSlot);
+router.put("/:id", authenticateJWT, updateSlot);
+router.delete("/:id", authenticateJWT, deleteSlot);
 
 export default router;
