@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import Slot, { SlotDocument } from "../models/Slot";
+import Slot from "../models/Slot";
 
-// GET /api/slots - Get all slots or get slots by user ID
+// GET /api/slots - Get all slots or get slots by tatoueur ID
 export const getAllSlots = async (req: Request, res: Response) => {
   try {
-    const userId = req.user!.id;
-    const slots = await Slot.find({ id_tatoueur: userId })
+    const { tatoueurId } = req.query;
+    const query = tatoueurId ? { id_tatoueur: tatoueurId } : {};
+    const slots = await Slot.find(query)
       .populate("id_tatoueur")
       .populate("id_visitor");
     res.status(200).json(slots);
