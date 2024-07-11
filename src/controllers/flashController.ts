@@ -29,10 +29,34 @@ export const getFlashById = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/flashes/my - Get flashes by user ID
+export const getMyFlashes = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const flashes = await Flash.find({ id_tatoueur: userId })
+      .populate("id_style")
+      .populate("id_tatoueur");
+    res.status(200).json(flashes);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching flashes" });
+  }
+};
+
 // POST /api/flashes - Create a new flash
 export const createFlash = async (req: Request, res: Response) => {
   try {
-    const flash = new Flash(req.body);
+    const userId = req.user!.id; // Assume req.user is populated by the authentication middleware
+    const { name, id_style, duration, image, description } = req.body;
+
+    const flash = new Flash({
+      name,
+      id_tatoueur: userId,
+      id_style,
+      duration,
+      image,
+      description,
+    });
+
     await flash.save();
     res.status(201).json(flash);
   } catch (err) {
