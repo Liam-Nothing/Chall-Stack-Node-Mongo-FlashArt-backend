@@ -18,7 +18,7 @@ router.get(
 );
 router.get(
   "/search",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   searchFlashes
 );
 router.get(

@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 import User, { UserDocument } from "../models/User";
 
-// GET /api/users - Get all users
+// GET /api/users - Get all users, with optional role filter
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
+    const role = req.query.role;
+    let users;
+    if (role) {
+      users = await User.find({ role: role });
+    } else {
+      users = await User.find();
+    }
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: "Error fetching users" });
