@@ -12,24 +12,15 @@ const generateToken = (user: UserDocument) => {
 };
 
 export const register = async (req: Request, res: Response) => {
-  const {
-    email,
-    password,
-    role,
-    name,
-    lastname,
-    pseudo,
-    description,
-    socialLinks,
-  } = req.body;
+  const { email, password, pseudo, name, lastname, description, socialLinks } =
+    req.body;
   try {
     const user = new User({
       email,
       password,
-      role,
+      pseudo,
       name,
       lastname,
-      pseudo,
       description,
       socialLinks,
     });

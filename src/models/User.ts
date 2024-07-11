@@ -11,8 +11,8 @@ export interface UserDocument extends Document {
   email: string;
   password: string;
   role: "utilisateur" | "tatoueur" | "admin" | "organisateur_event";
-  name: string;
-  lastname: string;
+  name?: string;
+  lastname?: string;
   pseudo: string;
   description?: string;
   socialLinks?: {
@@ -38,8 +38,8 @@ const UserSchema = new Schema<UserDocument>({
     enum: ["utilisateur", "tatoueur", "admin", "organisateur_event"],
     default: "utilisateur",
   },
-  name: { type: String, required: true },
-  lastname: { type: String, required: true },
+  name: { type: String },
+  lastname: { type: String },
   pseudo: { type: String, required: true },
   description: { type: String },
   socialLinks: { type: Map, of: String },
