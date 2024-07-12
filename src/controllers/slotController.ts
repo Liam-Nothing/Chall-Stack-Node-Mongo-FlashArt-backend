@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import Slot from "../models/Slot";
 
 // GET /api/slots - Get all slots or get slots by tatoueur ID
@@ -75,5 +76,44 @@ export const deleteSlot = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Slot deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Error deleting slot" });
+  }
+};
+
+// PUT /api/slots/:id/book - Book a slot
+export const bookSlot = async (req: Request, res: Response) => {
+  try {
+    const slot = await Slot.findById(req.params.id);
+    if (!slot) {
+      return res.status(404).json({ error: "Slot not found" });
+    }
+    if (!slot.is_available) {
+      return res.status(400).json({ error: "Slot is not available" });
+    }
+    slot.id_visitor = new Types.ObjectId(req.user!.id);
+    slot.is_available = false;
+    await slot.save();
+    res.status(200).json(slot);
+  } catch (err) {
+    res.status(500).json({ error: "Error booking slot" });
+  }
+};
+
+// GET /api/slots/available - Get available slots by tatoueur ID
+export const getAvailableSlotsByTatoueur = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { tatoueurId } = req.query;
+    if (!tatoueurId) {
+      return res.status(400).json({ error: "tatoueurId is required" });
+    }
+    const query = { id_tatoueur: tatoueurId, is_available: true };
+    const slots = await Slot.find(query)
+      .populate("id_tatoueur")
+      .populate("id_visitor");
+    res.status(200).json(slots);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching available slots" });
   }
 };

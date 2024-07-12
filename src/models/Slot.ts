@@ -1,8 +1,8 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, Document, model, Types } from "mongoose";
 
 export interface SlotDocument extends Document {
-  id_tatoueur: Schema.Types.ObjectId;
-  id_visitor?: Schema.Types.ObjectId;
+  id_tatoueur: Types.ObjectId;
+  id_visitor?: Types.ObjectId;
   start_date_time: Date;
   end_date_time: Date;
   is_available: boolean;
@@ -16,7 +16,7 @@ const SlotSchema = new Schema<SlotDocument>({
     type: Date,
     required: true,
     default: () => new Date(new Date().getTime() + 4 * 60 * 60 * 1000),
-  }, // default to half day (4 hours)
+  },
   is_available: { type: Boolean, default: true },
 });
 
