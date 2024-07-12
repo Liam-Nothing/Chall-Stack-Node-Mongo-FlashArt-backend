@@ -7,13 +7,15 @@ import {
   deleteSlot,
   bookSlot,
   getAvailableSlotsByTatoueur,
+  getMySlots,
 } from "../controllers/slotController";
 import { authenticateJWT } from "../middleware/authMiddleware";
 
 const router = Router();
 
 router.get("/", authenticateJWT, getAllSlots);
-router.get("/available", authenticateJWT, getAvailableSlotsByTatoueur); // New route for available slots
+router.get("/my", authenticateJWT, getMySlots);
+router.get("/available", authenticateJWT, getAvailableSlotsByTatoueur);
 router.get("/:id", authenticateJWT, getSlotById);
 router.post("/", authenticateJWT, createSlot);
 router.put("/:id", authenticateJWT, updateSlot);

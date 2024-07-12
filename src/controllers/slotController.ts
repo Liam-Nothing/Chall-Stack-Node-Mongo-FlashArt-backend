@@ -117,3 +117,16 @@ export const getAvailableSlotsByTatoueur = async (
     res.status(500).json({ error: "Error fetching available slots" });
   }
 };
+
+// GET /api/slots/my - Get slots of the authenticated user
+export const getMySlots = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const slots = await Slot.find({ id_tatoueur: userId })
+      .populate("id_tatoueur")
+      .populate("id_visitor");
+    res.status(200).json(slots);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching user's slots" });
+  }
+};
